@@ -42,18 +42,18 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: FreundDK/AL-Go-Actions/WorkflowInitialize@main
+        uses: FreundDK/AL-Go-Actions/WorkflowInitialize@mychanges
         with:
           eventId: "DO0092"
 
       - name: Read settings
-        uses: FreundDK/AL-Go-Actions/ReadSettings@main
+        uses: FreundDK/AL-Go-Actions/ReadSettings@mychanges
         with:
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           get: type
 
       - name: Creating a new app
-        uses: FreundDK/AL-Go-Actions/CreateApp@main
+        uses: FreundDK/AL-Go-Actions/CreateApp@mychanges
         with:
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           project: ${{ github.event.inputs.project }}
@@ -66,7 +66,7 @@ jobs:
 
       - name: Finalize the workflow
         if: always()
-        uses: FreundDK/AL-Go-Actions/WorkflowPostProcess@main
+        uses: FreundDK/AL-Go-Actions/WorkflowPostProcess@mychanges
         with:
           eventId: "DO0092"
           telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}

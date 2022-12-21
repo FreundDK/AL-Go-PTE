@@ -33,13 +33,13 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: FreundDK/AL-Go-Actions/WorkflowInitialize@main
+        uses: FreundDK/AL-Go-Actions/WorkflowInitialize@mychanges
         with:
           eventId: "DO0097"
 
       - name: Read settings
         id: ReadSettings
-        uses: FreundDK/AL-Go-Actions/ReadSettings@main
+        uses: FreundDK/AL-Go-Actions/ReadSettings@mychanges
         with:
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           getEnvironments: ${{ github.event.inputs.environmentName }}
@@ -65,10 +65,10 @@ jobs:
           Add-Content -Path $env:GITHUB_OUTPUT -Value "envName=$envName"
 
       - name: Read settings
-        uses: FreundDK/AL-Go-Actions/ReadSettings@main
+        uses: FreundDK/AL-Go-Actions/ReadSettings@mychanges
 
       - name: Read secrets
-        uses: FreundDK/AL-Go-Actions/ReadSecrets@main
+        uses: FreundDK/AL-Go-Actions/ReadSecrets@mychanges
         env:
           secrets: ${{ toJson(secrets) }}
         with:
@@ -126,7 +126,7 @@ jobs:
           Write-Host "projects=$projects"
 
       - name: Deploy
-        uses: FreundDK/AL-Go-Actions/Deploy@main
+        uses: FreundDK/AL-Go-Actions/Deploy@mychanges
         env:
           authContext: ${{ steps.authContext.outputs.authContext }}
         with:
@@ -146,7 +146,7 @@ jobs:
 
       - name: Finalize the workflow
         id: PostProcess
-        uses: FreundDK/AL-Go-Actions/WorkflowPostProcess@main
+        uses: FreundDK/AL-Go-Actions/WorkflowPostProcess@mychanges
         with:
           eventId: "DO0097"
           telemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
