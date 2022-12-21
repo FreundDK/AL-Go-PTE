@@ -1,6 +1,57 @@
-## preview
+## Preview
 
 Note that when using the preview version of AL-Go for GitHub, you need to Update your AL-Go system files, as soon as possible when told to do so.
+
+### Issues
+- Issue #312 Branching enhancements
+- Issue #229 Create Release action tags wrong commit
+- Issue #283 Create Release workflow uses deprecated actions
+
+### Continuous Delivery
+
+Continuous Delivery can now run from other branches than main. By specifying a property called branches, containing an array of branches in the deliveryContext json construct, the artifacts generated from this branch are also delivered. The branch specification can include wildcards (like release/*). Default is main, i.e. no changes to functionality.
+
+### Continuous Deployment
+
+Continuous Deployment can now run from other branches than main. By creating a repo setting (.github/AL-Go-Settings.json) called **`<environmentname>-Branches`**, which is an array of branches, which will deploy the generated artifacts to this environment. The branch specification can include wildcards (like release/*), although this probably won't be used a lot in continuous deployment. Default is main, i.e. no changes to functionality.
+
+### Create Release
+When locating artifacts for the various projects, the SHA used to build the artifact is used for the release tag
+If all projects are not available with the same SHA, this error is thrown: **The build selected for release doesn't contain all projects. Please rebuild all projects by manually running the CI/CD workflow and recreate the release.**
+There is no longer a hard dependency on the main branch name from Create Release.
+
+## v2.2
+
+### Enhancements
+- Container Event log is added as a build artifact if builds or tests are failing
+
+### Issues
+- Issue #280 Overflow error when test result summary was too big
+- Issue #282, 292 AL-Go for GitHub causes GitHub to issue warnings
+- Issue #273 Potential security issue in Pull Request Handler in Open Source repositories
+- Issue #303 PullRequestHandler fails on added files
+- Issue #299 Multi-project repositories build all projects on Pull Requests
+- Issue #291 Issues with new Pull Request Handler 
+- Issue #287 AL-Go pipeline fails in ReadSettings step
+
+### Changes
+- VersioningStrategy 1 is no longer supported. GITHUB_ID has changed behavior (Issue #277)
+
+## v2.1
+
+### Issues
+- Issue #233 AL-Go for GitHub causes GitHub to issue warnings
+- Issue #244 Give error if AZURE_CREDENTIALS contains line breaks
+
+### Changes
+- New workflow: PullRequestHandler to handle all Pull Requests and pass control safely to CI/CD
+- Changes to yaml files, PowerShell scripts and codeowners files are not permitted from fork Pull Requests
+- Test Results summary (and failed tests) are now displayed directly in the CI/CD workflow and in the Pull Request Check
+
+### Continuous Delivery
+- Proof Of Concept Delivery to GitHub Packages and Nuget
+
+## v2.0
 
 ### Issues
 - Issue #143 Commit Message for **Increment Version Number** workflow
@@ -12,11 +63,17 @@ Note that when using the preview version of AL-Go for GitHub, you need to Update
 - Issue #189 Warnings: Resource not accessible by integration
 - Issue #190 PublishToEnvironment is not working with AL-Go-PTE@preview
 - Issue #186 AL-GO build fails for multi-project repository when there's nothing to build
+- When you have GitHub pages enabled, AL-Go for GitHub would try to publish to github_pages environment
+- Special characters wasn't supported in parameters to GitHub actions (Create New App etc.)
+
+### Continuous Delivery
+- Added new GitHub Action "Deliver" to deliver build output to Storage or AppSource
+- Refactor CI/CD and Release workflows to use new deliver action
+- Custom delivery supported by creating scripts with the naming convention DeliverTo*.ps1 in the .github folder
 
 ### AppSource Apps
 - New workflow: Publish to AppSource
-- Added new GitHub Action "Deliver" to deliver build output to Storage or AppSource
-- Refactor CI/CD and Release workflows to use new deliver action
+- Continuous Delivery to AppSource validation supported
 
 ### Settings
 - New Repo setting: CICDPushBranches can be specified as an array of branches, which triggers a CI/CD workflow on commit. Default is main', release/\*, feature/\*
@@ -33,6 +90,7 @@ Note that when using the preview version of AL-Go for GitHub, you need to Update
 - Better error messages for if an error occurs within an action
 - Special characters are now supported in secrets
 - Initial support for agents running inside containers on a host
+- Optimized workflows to have fewer jobs
 
 ### Update AL-Go System Files Workflow
 - workflow now displays the currently used template URL when selecting the Run Workflow action
@@ -78,6 +136,7 @@ Note that when using the preview version of AL-Go for GitHub, you need to Update
 ### Environments
 - Add suport for EnvironmentName redirection by adding an Environment Secret under the environment or a repo secret called \<environmentName\>_EnvironmentName with the actual environment name.
 - No default environment name on Publish To Environment
+- For multi-project repositories, you can specify an environment secret called Projects or a repo setting called \<environment\>_Projects, containing the projects you want to deploy to this environment.
 
 ### Settings
 - New setting: **runs-on** to allow modifying runs-on for all jobs (requires Update AL-Go System files after changing the setting)
